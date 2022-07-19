@@ -1,0 +1,79 @@
+﻿@model IEnumerable<ProductRepository.Models.Product>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+
+<a class="btn btn-primary" href="@Url.Action("GetById", "Product")">Search By Product Id</a>
+<a class="btn btn-primary" href="@Url.Action("GetByName", "Product")">Search By Product Name</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Image_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+            {
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { proId = item.ProductId }) |
+                    @Html.ActionLink("Details", "Details", new { proId = item.ProductId }) |
+                    @Html.ActionLink("Delete", "Delete", new { proId = item.ProductId }) |
+                    @Html.ActionLink("DetailsByName", "DetailsByName", new { proName = item.ProductName })
+                </td>
+            }
+
+        </tr>
+        }
+    </tbody>
+</table>
